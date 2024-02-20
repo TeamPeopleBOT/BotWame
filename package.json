@@ -93,8 +93,6 @@
   "webgl": "^0.0.7",
   "wibusoft": "^1.0.7",
   "yargs": "^17.5.1",
-  "yt-search": "^2.10.3",
-  "ytdl-core": "github:officialdittaz/node-ytdl-core",
   "zs-extract": "^1.4.2"
  }
 }
