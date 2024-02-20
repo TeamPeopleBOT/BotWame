@@ -46,6 +46,7 @@ modul: {
     util: require('util'),
     Utils: require('@whiskeysockets/baileys/lib/Utils'),
     yargs: require('yargs'),
+    yts: require('yt-search'),
     webp: require('node-webpmux')
 }
 }
