@@ -174,11 +174,6 @@ global.db.chain = _.chain(global.db.data)
 loadDatabase()
 
   
-const { state, saveCreds } = await useMultiFileAuthState("session")
-//const store = useStore? makeInMemoryStore({ logger: logg().child({ level: 'fatal', stream: 'store' }) }) : undefined
-const store = makeInMemoryStore({ logger: logg().child({ level: 'fatal', stream: 'store' }) })
-const { version, isLatest } = await fetchLatestBaileysVersion()
-if (global.db.data) await global.db.write() 
 
   
   
