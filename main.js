@@ -63,8 +63,6 @@ day: 'numeric',
 month: 'long',
 year: 'numeric'
 })
-
-
 process.env.TZ = "Asia/Makassar"
 process.on('uncaughtException', console.error)
 const pairingCode = process.argv.includes("--pairing")
