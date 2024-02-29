@@ -3,7 +3,7 @@ const moment = require("moment-timezone");
 const time = moment().tz('Asia/Jakarta').format("HH:mm:ss")
 const fs = require("fs");
 const { color } = require("../lib/color");
-const { getBuffer, getRandom, getGroupAdmins,sleep} = require("../lib/myfunc");
+const { getBuffer, getRandom, getGroupAdmins,sleep,resize} = require("../lib/myfunc");
 const {TelegraPh} = require('../lib/uploader')
 const fetch = require('node-fetch');
 const chalk = require('chalk')
@@ -98,24 +98,38 @@ sourceUrl: 'https://chat.whatsapp.com/Fguw4KxsP6qCBm9RfZvHOS'
 }  
 switch (action) {
 case 'add':{
-let teks = `0ཻུ۪۪ꦽꦼ̷⸙‹•══════════════♡᭄
-│       *「 WELCOME 」*
-│ Hallo *@user*💐
-│ *Member ke : ${memb}*
-│ Mau kartu intro? ketik .intro
-╰═════ꪶ ཻུ۪۪ꦽꦼ̷⸙ ━ ━ ━ ━ ꪶ ཻུ۪۪ꦽꦼ̷⸙
-Deskripsi : \n@desc`
-
-let yui = fs.readFileSync('./temp/audio/welcome.mp3')
-
-const welcomeText =  (chat.sWelcome|| teks).replace('user', await alice.getName(sender)).replace('@desc', groupDesc.toString() || 'unknow') 
-if (chat.welcome && !itsMe && oneMem)
-alice.sendMessage(from, { contextInfo, text: welcomeText })
-alice.sendMessage(m.chat,{
-audio: yui,mimetype:'audio/mp4', ptt:true })
-  
+const fakentos = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: "status@broadcast" } : {}) }, message: { "extendedTextMessage": { "text": `*ᴜsᴇʀ:* _${pushname} 🌸_\n	╰≻ ᴍᴇᴍʙᴇʀ ᴋᴇ : ${memb}`, "title": `https://wa.me/6285262556649`, 'jpegThumbnail': await resize(fs.readFileSync('./FANDYS.jpg'), 200, 200) }}}
+const canvacard = require("canvacard");
+let ppimg = await alice.profilePictureUrl(sender, 'image').catch(_ => 'https://i.ibb.co/sVsHmzs/20240229-221304.png')
+let teks = `_*𝑪𝒐𝒑𝒚𝒓𝒊𝒈𝒉𝒕 • 𝟐𝟎𝟐𝟒*_`
+let its = await getBuffer (ppimg)
+const background = "https://i.ibb.co/5RWQCr1/20240229-120917.png";
+let image3 = new canvacard.Welcomer()
+    .setAvatar(ppimg)
+    .setBackground('IMAGE', background)
+    .setTitulo(`${pushname}`)
+    .setTypeOverlay("ROUNDED")
+    .setSubtitulo("Selamat datang jangan lupa untuk terus bernapas.")
+    .setColor("border", "#A6A6A6CC")
+    .setColorTitulo("#FFFFFF")
+    .setColorSubtitulo("#FF0000")
+    .setColorCircle("#A6A6A6CC")
+    .setColorOverlay("#A6A6A600")
+    .setOpacityOverlay("0.4")
+    let pante = await getRandom(".png")
+    image3.build()
+    .then(async data => {
+    await canvacard.write(data,pante);
+    let bujang = await fs.readFileSync(pante)
+      alice.sendMessage(from, { text: teks, contextInfo:{ forwardingScore: 9999999, isForwarded: true, mentionedJid:[m.sender], "externalAdReply": { "showAdAttribution": true, "renderLargerThumbnail": true, "title": "𝐕 𝐓 ΞΛ𝐌 • 𝐎𝐅𝐅𝐈𝐂𝐈𝐀𝐋 || 𝐖𝐄𝐋𝐋𝐂𝐎𝐌𝐄 𝐌𝐄𝐒𝐒𝐀𝐆𝐄","containsAutoReply": true, "mediaType": 1, "body": "Anonymous System", "thumbnail": bujang, "sourceUrl": `https://whatsapp.com/channel/0029VaNLQsm7j6fzUSsRcQ1S` } } },{ quoted: fakentos})
+    await fs.unlinkSync(pante)
+        });
 }
 break
+
+
+
+		
 case 'remove':{
 let teks = `0ཻུ۪۪ꦽꦼ̷⸙‹•══════════════♡᭄
 │       *「 GOOD BYEE 」*
