@@ -148,7 +148,7 @@ let teks =`── ❖ ❍ 「𝐋𝐞𝐚𝐯𝐞 𝐌𝐞𝐬𝐬𝐚𝐠𝐞 �
 
 _*𝑪𝒐𝒑𝒚𝒓𝒊𝒈𝒉𝒕 • 𝟐𝟎𝟐𝟒*_`
 let its = await getBuffer (ppimg)
-const background = "https://i.ibb.co/2NbmrX0/20240303-222837.png";
+const background = "https://i.ibb.co/pRLQDYF/20240304-075820.png";
 let image3 = new canvacard.Welcomer()
     .setAvatar(ppimg)
     .setBackground('IMAGE', background)
