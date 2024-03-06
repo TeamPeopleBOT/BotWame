@@ -422,8 +422,7 @@ await saveCreds()
 // history received
 if(events['messaging-history.set']) {
 const { chats, contacts, messages, isLatest } = events['messaging-history.set']
-console.log(`recv ${chats.length} chats, ${contacts.length} contacts, ${messages.length} msgs (is latest: ${isLatest})`)
-			}  
+}  
   
 
   
