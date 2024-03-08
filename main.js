@@ -231,9 +231,9 @@ getMessage,
 //browser: Browsers.macOS('Desktop'),
 //Jika ubuntu mengalami gangguan, ganti browser di atas
 browser: ["Ubuntu","Chrome","20.0.04"],
-keepAliveIntervalMs: 10000,
+connectTimeoutMs: 60_000,
 defaultQueryTimeoutMs: 0,
-connectTimeoutMs: 60000,
+keepAliveIntervalMs: 10000,
 emitOwnEvents: true,
 fireInitQueries: true,
 generateHighQualityLinkPreview: true,
@@ -422,7 +422,8 @@ await saveCreds()
 // history received
 if(events['messaging-history.set']) {
 const { chats, contacts, messages, isLatest } = events['messaging-history.set']
-}  
+console.log(`recv ${chats.length} chats, ${contacts.length} contacts, ${messages.length} msgs (is latest: ${isLatest})`)
+			}  
   
 
   
