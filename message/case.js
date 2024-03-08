@@ -1266,8 +1266,6 @@ await fs.unlinkSync(media)
   
   
   
-} catch (err){
-console.log(chalk.bgRed(color("[  ERROR  ]", "black")),util.format(err))
 let e = String(err) 
 if (e.includes("this.isZero")) {return}
 if (e.includes("rate-overlimit")) {
