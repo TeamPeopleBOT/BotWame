@@ -1,23 +1,6 @@
-
 "use strict";
 require("./settings.js")
-const {
-  default: makeWaSocket,
-  useMultiFileAuthState,
-  DisconnectReason,
-  fetchLatestBaileysVersion,
-  generateForwardMessageContent,
-  generateWAMessage,
-  prepareWAMessageMedia,
-  generateWAMessageFromContent,
-  generateMessageID,
-  downloadContentFromMessage,
-  makeInMemoryStore,
-  PHONENUMBER_MCC,
-  jidDecode,
-  proto,
-  makeCacheableSignalKeyStore,
-} = global.baileys
+const {default: makeWaSocket,useMultiFileAuthState,DisconnectReason,fetchLatestBaileysVersion,generateForwardMessageContent,generateWAMessage,prepareWAMessageMedia,generateWAMessageFromContent,generateMessageID,downloadContentFromMessage,makeInMemoryStore,PHONENUMBER_MCC,jidDecode,proto,makeCacheableSignalKeyStore} = global.baileys
 const fs = require("fs");
 const logg = require('pino')
 const qrcode = require('qrcode')
@@ -32,25 +15,18 @@ const readline = require('readline');
 const { color} = require("./lib/color");
 const spin = require('spinnies')
 const {getRandom, getBuffer,sleep} = require("./lib/myfunc");
-if(runWith.includes("eplit")){
-}
+if(runWith.includes("eplit")){}
 const connect = require("./server.js")
 const PORT = process.env.PORT || 3000 
-
-
 let d = new Date
 let locale = 'id'
 let gmt = new Date(0).getTime() - new Date('1 Januari 2021').getTime()
 let weton = ['Pahing', 'Pon','Wage','Kliwon','Legi'][Math.floor(((d * 1) + gmt) / 84600000) % 5]
 let week = d.toLocaleDateString(locale, { weekday: 'long' })
-const calender = d.toLocaleDateString("id", {
-day: 'numeric',
-month: 'long',
-year: 'numeric'
-})
+const calender = d.toLocaleDateString("id", {day: 'numeric',month: 'long',year: 'numeric'})
 
 
-process.env.TZ = "Asia/Makassar"
+process.env.TZ = "Asia/Jakarta"
 process.on('uncaughtException', console.error)
 const pairingCode = process.argv.includes("--pairing")
 // Spinner Console
@@ -80,30 +56,17 @@ if(!globalSpinner) globalSpinner = new spin({ color: 'blue', succeedColor: 'gree
 return globalSpinner;
 }
 let spins = getGlobalSpinner(false)
-const start = (id, text) => {
-spins.add(id, {text: text})
-}
-const success = (id, text) => {
-spins.succeed(id, {text: text})
-
-}
-
-CFonts.say('fearless', {
-  font: 'chrome',
-  align: 'left',
-  gradient: ['red', 'magenta']
-})
-
-
+const start = (id, text) => {spins.add(id, {text: text})}
+const success = (id, text) => {spins.succeed(id, {text: text})}
 const useStore = !process.argv.includes('--no-store')
 const doReplies = !process.argv.includes('--no-reply')
 const useMobile = process.argv.includes('--mobile')
+CFonts.say('VTEAMS', {font: 'chrome',align: 'left',gradient: ['red', 'magenta']})
+
 
 // Read line interface
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
 const question = (text) => new Promise((resolve) => rl.question(text, resolve))
-
-
 const store = makeInMemoryStore({ logger: logg().child({ level: 'silent', stream: 'store' }) })
 
 
@@ -111,7 +74,6 @@ const connectToWhatsApp = async () => {
 
  //Function untuk update runtime di database
 setInterval(() => {
-
 let data = global.db.data.others['runtime']
 
 if(data){ 
@@ -125,9 +87,7 @@ runtime: + new Date,
 lastTime: + new Date
 }
 console.log("New update runtime")
-}
-
-},60_000)
+}},60_000)
   
 const {Low} = (await import("lowdb"))
 const chalk =  (await import("chalk"))
@@ -170,34 +130,21 @@ loadDatabase()
 
 
 const { state, saveCreds } = await useMultiFileAuthState(".session")
-//const store = useStore? makeInMemoryStore({ logger: logg().child({ level: 'fatal', stream: 'store' }) }) : undefined
 const store = makeInMemoryStore({ logger: logg().child({ level: 'fatal', stream: 'store' }) })
 const { version, isLatest } = await fetchLatestBaileysVersion()
 if (global.db.data) await global.db.write() 
 
-  
-  
-
-  
 
 //Funtion agar pesan bot tidak pending  
 const getMessage = async (key) => {
 if(store) {
 const msg = await store.loadMessage(key.remoteJid, key.id, undefined)
-return msg?.message || undefined
-}
-return {
-conversation: 'hallo'
-}
-}
+return msg?.message || undefined}
+return {conversation: 'hallo'}}
 
 
 //Untuk menyimpan session  
-const auth = {
-creds: state.creds,
-/** caching membuat penyimpanan lebih cepat untuk mengirim/menerima pesan */
-keys: makeCacheableSignalKeyStore(state.keys, logg().child({ level: 'fatal', stream: 'store' })),
-}
+const auth = {creds: state.creds,keys: makeCacheableSignalKeyStore(state.keys, logg().child({ level: 'fatal', stream: 'store' }))}
  
 const connectionOptions = {
 version,
@@ -205,11 +152,6 @@ printQRInTerminal: !global.usePairingCode,
 logger: logg({ level: 'fatal' }),
 auth,
 getMessage,
-//browser: ['IOS','IOS','2.1.0'],
-//browser: ['Chrome (Linux)'],
-//browser: ['Chrome (Linux)', '', ''],
-//browser: Browsers.macOS('Desktop'),
-//Jika ubuntu mengalami gangguan, ganti browser di atas
 browser: ["Ubuntu","Chrome","20.0.04"],
 connectTimeoutMs: 60_000,
 defaultQueryTimeoutMs: 0,
@@ -220,10 +162,8 @@ generateHighQualityLinkPreview: true,
 syncFullHistory: true,
 markOnlineOnConnect: true,
 }
- 
 global.alice = simple.makeWASocket(connectionOptions)
 connect(alice, PORT)
-
 store.bind(alice.ev)
 alice.waVersion = version
 
@@ -231,17 +171,14 @@ alice.waVersion = version
 
 if (global.usePairingCode && !alice.authState.creds.registered) {
 if (useMobile) throw new Error('Cannot use pairing code with mobile api')
-
 let phoneNumber
 if (!!global.pairingNumber) {
 phoneNumber = global.pairingNumber.replace(/[^0-9]/g, '')
 
 if (!Object.keys(PHONENUMBER_MCC).some(v => phoneNumber.startsWith(v))) {
 console.log(chalk.bgBlack(chalk.redBright("Start with your country's WhatsApp code, Example : 62xxx")))
-process.exit(0)
-}
-} else {
-phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number : `)))
+process.exit(0)}}
+else {phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number : `)))
 phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
 
 // Ask again when entering the wrong number
@@ -251,38 +188,33 @@ console.log(chalk.bgBlack(chalk.redBright("Start with your country's WhatsApp co
 phoneNumber = await question(chalk.bgBlack(chalk.greenBright(`Please type your WhatsApp number : `)))
 phoneNumber = phoneNumber.replace(/[^0-9]/g, '')
 rl.close()
-}
-}
+}}
 
 setTimeout(async () => {
 let code = await alice.requestPairingCode(phoneNumber)
 code = code?.match(/.{1,4}/g)?.join("-") || code
 console.log(`Your Pairing Code : ${code}`)
-}, 3000)
-}
+}, 3000)}
 
     
 
 
 //welcome
-alice.ev.on('group-participants.update', async (anu) => {
-require('./message/group.js')(alice, anu)
-})
+alice.ev.on('group-participants.update', async (anu) => {require('./message/group.js')(alice, anu)})
 
 
   //auto reject call
 alice.ev.on('call', (json) => { 
-  const {id, from, status } = json[0]; 
-  if (status == 'offer') {
-		if(from == global.ownerjid) return
-    console.log(json)
-    alice.rejectCall(id, from)
-   // await sleep (2000)
-    alice.sendMessage(from, {text: `I'm busy, don't talk me`});
-  } 
-})
+const {id, from, status } = json[0]; 
+if (status == 'offer') {
+    if(from == global.ownerjid) return
+        console.log(json)
+        alice.rejectCall(id, from)
+        alice.sendMessage(from, {text: `I'm busy, don't talk me`})
+}})
+
+
 alice.cMod = (jid, copy, text = '', sender = alice.user.id, options = {}) => {
-//let copy = message.toJSON()
 let mtype = Object.keys(copy.message)[0]
 let isEphemeral = mtype === 'ephemeralMessage'
 if (isEphemeral) {
@@ -313,19 +245,13 @@ var m = chatUpdate.messages[0] || chatUpdate.messages[chatUpdate.messages.length
 if (!m.message) return
 if (m.key.id.startsWith('BAE5') && m.key.id.length === 16) return
 m = simple.smsg(alice, m, store)
- 
 require('./message/case')(alice, m, chatUpdate,store)
-  
-}catch (err){
-//Log("Error bro")
-console.log(err)
-}
-  })
+}catch (err){console.log(err)}
+})
   
            
   
 alice.ev.process(async(events) => {
-
 if(events['connection.update']) {
 const update = events['connection.update']
 const { connection, lastDisconnect } = update
@@ -333,156 +259,26 @@ const  reason = new Boom(lastDisconnect?.error)?.output.statusCode
 if (global.db.data == null) await loadDatabase() 
 if (connection === 'close') {
 console.log(color(lastDisconnect.error, 'deeppink'));
+if(lastDisconnect.error == "Error: Stream Errored (unknown)"){process.send('reset')}
+else if (reason === DisconnectReason.badSession) { console.log(color(`Bad Session File, Please Delete Session and Scan Again`)); process.send('reset')}
+else if (reason === DisconnectReason.connectionClosed) { console.log(color("[SYSTEM]", "white"), color('Connection closed, reconnecting...', 'deeppink')); process.send('reset')}
+else if (reason === DisconnectReason.connectionLost) { console.log(color("[SYSTEM]", "white"), color('Connection lost, trying to reconnect', 'deeppink'));process.send('reset')}
+else if (reason === DisconnectReason.connectionReplaced) { console.log(color("Connection Replaced, Another New Session Opened, Please Close Current Session First"));alice.logout()}
+else if (reason === DisconnectReason.loggedOut) { console.log(color(`Device Logged Out, Please Scan Again And Run.`)); alice.logout()}
+else if (reason === DisconnectReason.restartRequired) {console.log(color("Restart Required, Restarting...")); connectToWhatsApp(); process.send('reset')}
+else if (reason === DisconnectReason.timedOut) {console.log(color("Connection TimedOut, Reconnecting..."));connectToWhatsApp()}}
+else if (connection === 'connecting') {} else if (connection === 'open') {console.log(`${color(`[■■■■■■■■■■■■■■■] Connected`, 'green')}`)}}
 
-if(lastDisconnect.error == "Error: Stream Errored (unknown)"){
-process.send('reset')
 
-} else if (reason === DisconnectReason.badSession) { 
-  
-console.log(color(`Bad Session File, Please Delete Session and Scan Again`)); 
-process.send('reset')
-  
-} else if (reason === DisconnectReason.connectionClosed) { 
-  
-console.log(color("[SYSTEM]", "white"), color('Connection closed, reconnecting...', 'deeppink')); 
-process.send('reset')
-  
-} else if (reason === DisconnectReason.connectionLost) { 
-  
-console.log(color("[SYSTEM]", "white"), color('Connection lost, trying to reconnect', 'deeppink'));
-process.send('reset')
-  
-} else if (reason === DisconnectReason.connectionReplaced) { 
-  
-console.log(color("Connection Replaced, Another New Session Opened, Please Close Current Session First"));
-alice.logout(); 
-  
-} else if (reason === DisconnectReason.loggedOut) { 
-  
-console.log(color(`Device Logged Out, Please Scan Again And Run.`)); 
-alice.logout(); 
-  
-} else if (reason === DisconnectReason.restartRequired) {
-  
-console.log(color("Restart Required, Restarting...")); 
-connectToWhatsApp(); 
-process.send('reset')
-  
-} else if (reason === DisconnectReason.timedOut) {
-  
-console.log(color("Connection TimedOut, Reconnecting..."));
-connectToWhatsApp(); 
 
-}
-
-} else if (connection === 'connecting') {} else if (connection === 'open') {
-console.log(`${color(`[■■■■■■■■■■■■■■■] Connected`, 'green')}`)
-}}
 
 // kredensial diperbarui -- simpan
-if(events['creds.update']) { 
-await saveCreds()
-}
-
-  
+if(events['creds.update']) {await saveCreds()}
 //------------------------------------[BATAS]--------------------------------\\
 
 })
-
-  //Function untuk update gempa BMKG
-//let gempa = db.data.others['updateGempa']
-//let data1 = db.data.others['infogempa']
-//if(!gempa) db.data.others['updateGempa'] = []
-
-//if(gempa && gempa.length > 0){
-
-//setInterval(async() => {
-//const {data} = await axios.get("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json")
-//let nana = /TimurLaut|Tenggara|BaratDaya|BaratLaut|Utara|Timur|Selatan|Barat/
-//console.log(data.Infogempa)
-//let lokasi = data.Infogempa.gempa.Wilayah //.split("km")[1].replace(nana,"").replace(" ",'').replace(" ","")
-//let waktu = data.Infogempa.gempa.Jam
-//let caption = ` *INFO GEMPA*
-
-//*Tanggal:* ${data.Infogempa.gempa.Tanggal}
-//*Waktu:* ${data.Infogempa.gempa.Jam}
-//*Kordinat:* ${data.Infogempa.gempa.Coordinates}
-//*Magnitudo:* ${data.Infogempa.gempa.Magnitude}
-//*Kedalaman:* ${data.Infogempa.gempa.Kedalaman}
-//*Lokasi:* ${data.Infogempa.gempa.Wilayah}
-//*Potention:* ${data.Infogempa.gempa.Potensi}
-//*Effect:* ${data.Infogempa.gempa.Dirasakan}
-
-//*Note:*
-//_Untuk menonaktifkan fitur otomatis update gempa tersebut, silahkan ketik .updategempa off_
-//`
-
-//if(data1){
-//let getGroups = await alice.groupFetchAllParticipating()
-//let groupss = Object.entries(getGroups).slice(0).map(entry => entry[1])
-//let anus = groupss.map(v => v.id)
-//let image = {url:"https://data.bmkg.go.id/DataMKG/TEWS/" + data.Infogempa.gempa.Shakemap}
-  
-//if(data1.lokasi !== lokasi && data1.lokasi !== waktu){
- 
-//data1.lokasi = lokasi
-//data1.waktu = waktu
-  
-//for(let i of gempa){
-//if(!anus.includes(i)) {
-//gempa.splice(gempa.indexOf(i,1)) 
-//console.log("menghapus auto update gempa pada group")
-//} else {
-//await sleep(3000)
-//alice.sendMessage(i,{image,caption}) 
-//}
-//}
-//}
-
-  
-//} else {
-//let getGroups = await alice.groupFetchAllParticipating()
-//let groupss = Object.entries(getGroups).slice(0).map(entry => entry[1])
-//let anus = groupss.map(v => v.id)
-
-//db.data.others['infogempa'] = {
-//lokasi : lokasi,
-//waktu: waktu
-//}
-
-  
-//for(let i of gempa){
-//if(!anus.includes(i)) {
-//gempa.splice(gempa.indexOf(i,1)) 
-//console.log("menghapus auto update gempa pada group")
-//} else {
-//await sleep(3000)
-//alice.sendMessage(i,{image,caption}) 
-//}
-//}
- 
-//} 
-
-//}, 60_000*10)// akhir dari set interval
-
-//}// akhir dari gempa.length
-
-
-
-
-    
-
- 
-
-
- const Log = (text) =>{
-  console.log(text)
- }
-  
-
-
-
-  function clockString(ms) {
+const Log = (text) =>{console.log(text)}
+function clockString(ms) {
 let d = isNaN(ms) ? '--' : Math.floor(ms / 86400000)
 let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000) % 24
 let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
@@ -495,13 +291,9 @@ let time = d > 0 ? dDisplay + hDisplay + mDisplay + sDisplay : hDisplay + mDispl
 return time
 }
 
-
-	
 global.chalk = chalk
 global.clockString = clockString
 global.Log = Log
-
 	return alice
  }
-
 connectToWhatsApp()
