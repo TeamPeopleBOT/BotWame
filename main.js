@@ -1,7 +1,5 @@
-// VERSI PAIRING ( DARWIN BIKIN ANJG )
-// GAUSAH DELETE NAMA GW, LU CUMAN PAKE DASAR KROCO
+
 "use strict";
-//process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 require("./settings.js")
 const {
   default: makeWaSocket,
@@ -31,7 +29,6 @@ const _ = require('lodash')
 const axios = require ('axios')
 const PhoneNumber = require('awesome-phonenumber')
 const readline = require('readline');
-//const welcome = JSON.parse(fs.readFileSync('./database/welcome.json'));
 const { color} = require("./lib/color");
 const spin = require('spinnies')
 const {getRandom, getBuffer,sleep} = require("./lib/myfunc");
@@ -180,23 +177,6 @@ if (global.db.data) await global.db.write()
 
   
   
-//Function untuk update runtime di database
-setInterval(() => {
-let data = global.db.data.others['runtime']
-if(data){ 
-if((new Date - data.lastTime) > (60000*60)){
-data.runtime = + new Date
-data.lastTime = + new Date
-console.log("Runtime di perbarui")
-} else data.lastTime = + new Date
-} else{ global.db.data.others['runtime'] = {
-runtime: + new Date,
-lastTime: + new Date
-}
-console.log("New update runtime")
-}
-
-},60_000)
 
   
 
@@ -395,22 +375,9 @@ connectToWhatsApp();
 
 }
 
-} else if (connection === 'connecting') {
-//console.log(`${color(`[`,`white`)+color(`1`,`red`)+color(`]`,`white`)}`,`WA v${version.join('.')}`)
-//await sleep(400) 
-console.log(`${color(`[`,`white`)+color(`2`,`red`)+color(`]`,`white`)}`,`${calender}`)
-//await sleep(400)  
-console.log(`${color(`[`,`white`)+color(`4`,`red`)+color(`]`,`white`)}`,"data 5") 
-//await sleep(400)  
-console.log(color(`]─`,`magenta`),`「`,  color(`FREE SCRIPT`,`red`), `」`,  color(`─[`,`magenta`))
-//await sleep(400)  
-//start(`1`,`Connecting...`)
-} else if (connection === 'open') {
-alice.sendMessage('6283817421530@s.whatsapp.net', {text: `*[ System Notice ]* Hallo owner, saya darwin ingin memberi tahukan bahwa script ini tidak untuk di perjual belikan! dengan sangat saya mempringatkan, jika anda ketahuan menjual script seenaknya, saya pastikan nomor anda tidak ada lagi di Whatsapp`})
-//success(`1`,`[■■■■■■■■■■■■■■■] Connected`) 
+} else if (connection === 'connecting') {} else if (connection === 'open') {
 console.log(`${color(`[■■■■■■■■■■■■■■■] Connected`, 'green')}`)
-}
-}
+}}
 
 // kredensial diperbarui -- simpan
 if(events['creds.update']) { 
@@ -418,96 +385,87 @@ await saveCreds()
 }
 
   
-
-// history received
-if(events['messaging-history.set']) {
-const { chats, contacts, messages, isLatest } = events['messaging-history.set']
-console.log(`recv ${chats.length} chats, ${contacts.length} contacts, ${messages.length} msgs (is latest: ${isLatest})`)
-			}  
-  
-
-  
 //------------------------------------[BATAS]--------------------------------\\
 
 })
 
   //Function untuk update gempa BMKG
-let gempa = db.data.others['updateGempa']
-let data1 = db.data.others['infogempa']
-if(!gempa) db.data.others['updateGempa'] = []
+//let gempa = db.data.others['updateGempa']
+//let data1 = db.data.others['infogempa']
+//if(!gempa) db.data.others['updateGempa'] = []
 
-if(gempa && gempa.length > 0){
+//if(gempa && gempa.length > 0){
 
-setInterval(async() => {
-const {data} = await axios.get("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json")
-let nana = /TimurLaut|Tenggara|BaratDaya|BaratLaut|Utara|Timur|Selatan|Barat/
+//setInterval(async() => {
+//const {data} = await axios.get("https://data.bmkg.go.id/DataMKG/TEWS/autogempa.json")
+//let nana = /TimurLaut|Tenggara|BaratDaya|BaratLaut|Utara|Timur|Selatan|Barat/
 //console.log(data.Infogempa)
-let lokasi = data.Infogempa.gempa.Wilayah //.split("km")[1].replace(nana,"").replace(" ",'').replace(" ","")
-let waktu = data.Infogempa.gempa.Jam
-let caption = ` *INFO GEMPA*
+//let lokasi = data.Infogempa.gempa.Wilayah //.split("km")[1].replace(nana,"").replace(" ",'').replace(" ","")
+//let waktu = data.Infogempa.gempa.Jam
+//let caption = ` *INFO GEMPA*
 
-*Tanggal:* ${data.Infogempa.gempa.Tanggal}
-*Waktu:* ${data.Infogempa.gempa.Jam}
-*Kordinat:* ${data.Infogempa.gempa.Coordinates}
-*Magnitudo:* ${data.Infogempa.gempa.Magnitude}
-*Kedalaman:* ${data.Infogempa.gempa.Kedalaman}
-*Lokasi:* ${data.Infogempa.gempa.Wilayah}
-*Potention:* ${data.Infogempa.gempa.Potensi}
-*Effect:* ${data.Infogempa.gempa.Dirasakan}
+//*Tanggal:* ${data.Infogempa.gempa.Tanggal}
+//*Waktu:* ${data.Infogempa.gempa.Jam}
+//*Kordinat:* ${data.Infogempa.gempa.Coordinates}
+//*Magnitudo:* ${data.Infogempa.gempa.Magnitude}
+//*Kedalaman:* ${data.Infogempa.gempa.Kedalaman}
+//*Lokasi:* ${data.Infogempa.gempa.Wilayah}
+//*Potention:* ${data.Infogempa.gempa.Potensi}
+//*Effect:* ${data.Infogempa.gempa.Dirasakan}
 
-*Note:*
-_Untuk menonaktifkan fitur otomatis update gempa tersebut, silahkan ketik .updategempa off_
-`
+//*Note:*
+//_Untuk menonaktifkan fitur otomatis update gempa tersebut, silahkan ketik .updategempa off_
+//`
 
-if(data1){
-let getGroups = await alice.groupFetchAllParticipating()
-let groupss = Object.entries(getGroups).slice(0).map(entry => entry[1])
-let anus = groupss.map(v => v.id)
-let image = {url:"https://data.bmkg.go.id/DataMKG/TEWS/" + data.Infogempa.gempa.Shakemap}
+//if(data1){
+//let getGroups = await alice.groupFetchAllParticipating()
+//let groupss = Object.entries(getGroups).slice(0).map(entry => entry[1])
+//let anus = groupss.map(v => v.id)
+//let image = {url:"https://data.bmkg.go.id/DataMKG/TEWS/" + data.Infogempa.gempa.Shakemap}
   
-if(data1.lokasi !== lokasi && data1.lokasi !== waktu){
+//if(data1.lokasi !== lokasi && data1.lokasi !== waktu){
  
-data1.lokasi = lokasi
-data1.waktu = waktu
+//data1.lokasi = lokasi
+//data1.waktu = waktu
   
-for(let i of gempa){
-if(!anus.includes(i)) {
-gempa.splice(gempa.indexOf(i,1)) 
-console.log("menghapus auto update gempa pada group")
-} else {
-await sleep(3000)
-alice.sendMessage(i,{image,caption}) 
-}
-}
-}
+//for(let i of gempa){
+//if(!anus.includes(i)) {
+//gempa.splice(gempa.indexOf(i,1)) 
+//console.log("menghapus auto update gempa pada group")
+//} else {
+//await sleep(3000)
+//alice.sendMessage(i,{image,caption}) 
+//}
+//}
+//}
 
   
-} else {
-let getGroups = await alice.groupFetchAllParticipating()
-let groupss = Object.entries(getGroups).slice(0).map(entry => entry[1])
-let anus = groupss.map(v => v.id)
+//} else {
+//let getGroups = await alice.groupFetchAllParticipating()
+//let groupss = Object.entries(getGroups).slice(0).map(entry => entry[1])
+//let anus = groupss.map(v => v.id)
 
-db.data.others['infogempa'] = {
-lokasi : lokasi,
-waktu: waktu
-}
+//db.data.others['infogempa'] = {
+//lokasi : lokasi,
+//waktu: waktu
+//}
 
   
-for(let i of gempa){
-if(!anus.includes(i)) {
-gempa.splice(gempa.indexOf(i,1)) 
-console.log("menghapus auto update gempa pada group")
-} else {
-await sleep(3000)
-alice.sendMessage(i,{image,caption}) 
-}
-}
+//for(let i of gempa){
+//if(!anus.includes(i)) {
+//gempa.splice(gempa.indexOf(i,1)) 
+//console.log("menghapus auto update gempa pada group")
+//} else {
+//await sleep(3000)
+//alice.sendMessage(i,{image,caption}) 
+//}
+//}
  
-} 
+//} 
 
-}, 60_000*10)// akhir dari set interval
+//}, 60_000*10)// akhir dari set interval
 
-}// akhir dari gempa.length
+//}// akhir dari gempa.length
 
 
 
