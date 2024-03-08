@@ -8,51 +8,31 @@ const { Server } = require("socket.io");
 const Readline = require('readline')
 const yargs = require('yargs/yargs')
 const rl = Readline.createInterface(process.stdin, process.stdout)
-
 var isRunning = false
-/**
-* Start a js file
-* @param {String} file `path/to/file`
-*/
+
 function start(file) {
 if (isRunning) return
 isRunning = true
 let args = [path.join(__dirname, file), ...process.argv.slice(2)]
-/*  CFonts.say([process.argv[0], ...args].join(' '), {
-font: 'console',
-align: 'center',
-gradient: ['red', 'magenta']
-})*/
-cluster.setupMaster({
-exec: path.join(__dirname, file),
-args: args.slice(1),
-})
-let p = cluster.fork()
-p.on('message', data => {
-console.log('[RECEIVED]', data)
-  
-switch (data) {
 
-    
+cluster.setupMaster({exec: path.join(__dirname, file),args: args.slice(1),})
+
+let p = cluster.fork()
+
+
+p.on('message', data => { console.log('[RECEIVED]', data)
+switch (data) {
 case 'reset':
 p.process.kill()
 isRunning = false
 start.apply(this, arguments)
 break
-
-    
-case 'null':
-p.process.kill()
-isRunning = false
-start.apply(this, arguments)
-break
-
-    
 }
 })
+
 p.on('exit', (_, code) => {
 if(code == null) process.exit()
-isRunning = false
+isRunning = true
 console.error('Exited with code:', code)
 
 if (code === 0) return
@@ -66,9 +46,5 @@ if (!opts['test'])
 if (!rl.listenerCount()) rl.on('line', line => {
 p.emit('message', line.trim())
 })
-// console.log(p)
 }
-
 start('main.js')
-
-
