@@ -1197,9 +1197,6 @@ reply( `Hai ${ucapanWaktu} kak *${pushname}*  ada yang bisa aku bantu ? silakan 
 user.pc = new Date * 1
 }
 
-    
-} catch (err){
- console.log(err)
 if(isCmd) Failed(toFirstCase(command), dash)
 let e = util.format(err)
 if(err.message.includes("Cannot find module")){
